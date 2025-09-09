@@ -171,7 +171,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_return_no_content_when_delete_employees_given_id() throws Exception {
+    public void should_return_no_content_when_delete_employees_by_id() throws Exception {
         String RequestBody = """
                 {
                     "name": "Jack",
@@ -190,6 +190,44 @@ public class EmployeeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(RequestBody))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void should_return_employees_when_get_employees_by_page() throws Exception {
+        String RequestBody = """
+                {
+                    "id": 1,
+                    "name": "TOM",
+                    "age": 18,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
+        Employee employee = new Employee();
+        employee.setName("TOM");
+        employee.setAge(18);
+        employee.setGender("Male");
+        employee.setSalary(5000.0);
+        Employee employee2 = new Employee();
+        Employee employee3 = new Employee();
+        BeanUtils.copyProperties(employee, employee2);
+        BeanUtils.copyProperties(employee, employee3);
+        employeeController.createEmployee(employee);
+        employeeController.createEmployee(employee2);
+        employeeController.createEmployee(employee3);
+        mockMvc.perform(get("/employees?page=1&pageSize=2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(RequestBody))
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("TOM"))
+                .andExpect(jsonPath("$[0].age").value(18))
+                .andExpect(jsonPath("$[0].gender").value("Male"))
+                .andExpect(jsonPath("$[0].salary").value(5000.0))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("TOM"))
+                .andExpect(jsonPath("$[1].age").value(18))
+                .andExpect(jsonPath("$[1].gender").value("Male"))
+                .andExpect(jsonPath("$[1].salary").value(5000.0));
     }
 
 }

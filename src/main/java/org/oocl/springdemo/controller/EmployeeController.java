@@ -52,4 +52,11 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/employees?page={page}&pageSize={pageSize}")
+    public List<Employee> getEmployeesByPage(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, employees.size());
+        return employees.subList(start, end);
+    }
+
 }
