@@ -6,6 +6,7 @@ import org.oocl.springdemo.pojo.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -67,5 +68,12 @@ public class CompanyControllerTest {
         mockMvc.perform(get("/companies/{id}",1))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("fall"));
+    }
+
+    @Test
+    public void should_return_no_content_when_delete_company_given_id() throws Exception {
+        companyController.createCompany(new Company("spring"));
+        mockMvc.perform(delete("/companies/{id}",1))
+                .andExpect(status().isNoContent());
     }
 }
