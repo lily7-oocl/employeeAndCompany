@@ -5,6 +5,7 @@ import org.oocl.springdemo.pojo.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,11 @@ public class CompanyController {
     @GetMapping("/companies")
     public List<Company> getAllCompanies() {
         return companies;
+    }
+
+    @GetMapping("/companies/{id}")
+    public Company getCompanyById(@PathVariable int id) {
+        return companies.stream().filter(company -> company.getId() == id).findFirst().orElse(null);
     }
 
 }
