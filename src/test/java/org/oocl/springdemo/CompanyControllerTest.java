@@ -76,4 +76,14 @@ public class CompanyControllerTest {
         mockMvc.perform(delete("/companies/{id}",1))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    public void should_return_companies_when_get_companies_by_page_given_page_and_pageSize() throws Exception {
+        companyController.createCompany(new Company("spring"));
+        companyController.createCompany(new Company("fall"));
+        mockMvc.perform(get("/companies?page={page}&pageSize={pageSize}",1,1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("spring"));
+    }
 }

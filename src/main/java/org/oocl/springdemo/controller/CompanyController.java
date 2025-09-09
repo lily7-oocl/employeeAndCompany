@@ -47,4 +47,11 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/companies?page={page}&pageSize={pageSize}")
+    public List<Company> getCompaniesByPage(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, companies.size());
+        return companies.subList(start, end);
+    }
+
 }
