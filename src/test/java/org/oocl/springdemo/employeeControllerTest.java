@@ -3,6 +3,7 @@ package org.oocl.springdemo;
 import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.EmployeeController;
 import org.oocl.springdemo.pojo.Employee;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -64,5 +65,44 @@ public class employeeControllerTest {
                 .andExpect(jsonPath("$.age").value(18))
                 .andExpect(jsonPath("$.gender").value("Male"))
                 .andExpect(jsonPath("$.salary").value(5000.0));
+    }
+
+    @Test
+    public void should_return_employees_when_get_employee_given_gender() throws Exception {
+        String RequestBody = """
+                {
+                    "id": 1,
+                    "name": "TOM",
+                    "age": 18,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
+        Employee employee = new Employee();
+        employee.setName("TOM");
+        employee.setAge(18);
+        employee.setGender("Male");
+        employee.setSalary(5000.0);
+        Employee employee2 = new Employee();
+        Employee employee3 = new Employee();
+        BeanUtils.copyProperties(employee, employee2);
+        BeanUtils.copyProperties(employee, employee3);
+        employee2.setGender("Female");
+        employeeController.createEmployee(employee);
+        employeeController.createEmployee(employee2);
+        employeeController.createEmployee(employee3);
+        mockMvc.perform(get("/employees?gender=Male")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(RequestBody))
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("TOM"))
+                .andExpect(jsonPath("$[0].age").value(18))
+                .andExpect(jsonPath("$[0].gender").value("Male"))
+                .andExpect(jsonPath("$[0].salary").value(5000.0))
+                .andExpect(jsonPath("$[1].id").value(3))
+                .andExpect(jsonPath("$[1].name").value("TOM"))
+                .andExpect(jsonPath("$[1].age").value(18))
+                .andExpect(jsonPath("$[1].gender").value("Male"))
+                .andExpect(jsonPath("$[1].salary").value(5000.0));
     }
 }

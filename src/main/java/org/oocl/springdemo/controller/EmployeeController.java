@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @RestController
-public class employeeController {
+public class EmployeeController {
     List<Employee> employees = new ArrayList<>();
     @PostMapping("/employee")
     public ResponseEntity<Map<String,Integer>> createEmployee(@RequestBody Employee employee) {
@@ -26,7 +26,7 @@ public class employeeController {
     }
     @GetMapping("/employees")
     public List<Employee> getEmployees(@RequestParam String gender) {
-        return employees.stream().filter(employee -> employee.getGender() == gender).collect(Collectors.toList());
+        return employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
     }
 
 }
