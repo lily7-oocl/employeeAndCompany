@@ -10,8 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -139,4 +138,36 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$[1].gender").value("Female"))
                 .andExpect(jsonPath("$[1].salary").value(5000.0));
     }
+
+    @Test
+    public void should_return_true_when_update_employee_given_id_and_employee() throws Exception {
+        String RequestBody = """
+                {
+                    "name": "TOM",
+                    "age": 20,
+                    "gender": "Female",
+                    "salary": 5000.0
+                }
+                """;
+        Employee employee = new Employee();
+        employee.setName("TOM");
+        employee.setAge(18);
+        employee.setGender("Male");
+        employee.setSalary(5000.0);
+        employeeController.createEmployee(employee);
+        mockMvc.perform(put("/employees/{id}",1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(RequestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(true));
+        mockMvc.perform(get("/employee/{id}",1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(RequestBody))
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("TOM"))
+                .andExpect(jsonPath("$.age").value(20))
+                .andExpect(jsonPath("$.gender").value("Female"))
+                .andExpect(jsonPath("$.salary").value(5000.0));
+    }
+
 }

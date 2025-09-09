@@ -33,4 +33,17 @@ public class EmployeeController {
                 : employees;
     }
 
+    @PutMapping("/employees/{id}")
+    public boolean updateEmployee(@PathVariable("id") int id, @RequestBody Employee newEmployee) {
+        Employee employee = employees.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
+        if (employee != null) {
+            employee.setName(newEmployee.getName());
+            employee.setAge(newEmployee.getAge());
+            employee.setGender(newEmployee.getGender());
+            employee.setSalary(newEmployee.getSalary());
+            return true;
+        }
+        return false;
+    }
+
 }
