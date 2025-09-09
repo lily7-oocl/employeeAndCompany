@@ -143,10 +143,10 @@ public class EmployeeControllerTest {
     public void should_return_true_when_update_employee_given_id_and_employee() throws Exception {
         String RequestBody = """
                 {
-                    "name": "TOM",
+                    "name": "Jack",
                     "age": 20,
                     "gender": "Female",
-                    "salary": 5000.0
+                    "salary": 50000.0
                 }
                 """;
         Employee employee = new Employee();
@@ -164,10 +164,32 @@ public class EmployeeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(RequestBody))
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("TOM"))
+                .andExpect(jsonPath("$.name").value("Jack"))
                 .andExpect(jsonPath("$.age").value(20))
                 .andExpect(jsonPath("$.gender").value("Female"))
-                .andExpect(jsonPath("$.salary").value(5000.0));
+                .andExpect(jsonPath("$.salary").value(50000.0));
+    }
+
+    @Test
+    public void should_return_no_content_when_delete_employees_given_id() throws Exception {
+        String RequestBody = """
+                {
+                    "name": "Jack",
+                    "age": 20,
+                    "gender": "Female",
+                    "salary": 50000.0
+                }
+                """;
+        Employee employee = new Employee();
+        employee.setName("TOM");
+        employee.setAge(18);
+        employee.setGender("Male");
+        employee.setSalary(5000.0);
+        employeeController.createEmployee(employee);
+        mockMvc.perform(delete("/employees/{id}",1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(RequestBody))
+                .andExpect(status().isNoContent());
     }
 
 }
