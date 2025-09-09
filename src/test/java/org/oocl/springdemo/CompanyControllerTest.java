@@ -23,16 +23,24 @@ public class CompanyControllerTest {
     private CompanyController companyController;
     @Test
     public void should_return_all_employees_when_get_all_employees() throws Exception {
-        String requestBody = """
-                {
-                    "id": 1,
-                    "name": "spring"
-                }
-                """;
         companyController.createCompany(new Company("spring"));
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("spring"));
+    }
+
+    @Test
+    public void should_return_id_when_create_company_given_company() throws Exception {
+        String requestBody = """
+                {
+                    "name": "spring"
+                }
+                """;
+        mockMvc.perform(post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1));
     }
 }
