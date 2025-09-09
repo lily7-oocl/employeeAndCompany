@@ -1,5 +1,6 @@
 package org.oocl.springdemo;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.CompanyController;
 import org.oocl.springdemo.pojo.Company;
@@ -21,6 +22,12 @@ public class CompanyControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private CompanyController companyController;
+
+    @BeforeEach
+    void setUp() {
+        companyController.clearCompanies();
+    }
+
     @Test
     public void should_return_all_employees_when_get_all_employees() throws Exception {
         companyController.createCompany(new Company("spring"));

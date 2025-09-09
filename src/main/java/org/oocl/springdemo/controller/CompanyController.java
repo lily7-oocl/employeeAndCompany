@@ -54,4 +54,7 @@ public class CompanyController {
         return companies.subList(start, end);
     }
 
+    public void clearCompanies() {
+        companies.clear();
+    }
 }
