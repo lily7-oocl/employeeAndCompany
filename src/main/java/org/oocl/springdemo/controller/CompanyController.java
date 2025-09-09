@@ -4,10 +4,7 @@ import org.oocl.springdemo.pojo.Company;
 import org.oocl.springdemo.pojo.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +29,16 @@ public class CompanyController {
     @GetMapping("/companies/{id}")
     public Company getCompanyById(@PathVariable int id) {
         return companies.stream().filter(company -> company.getId() == id).findFirst().orElse(null);
+    }
+
+    @PutMapping("/companies/{id}")
+    public boolean updateCompanyById(@PathVariable("id") int id, @RequestBody Company newCompany) {
+        Company company = companies.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
+        if (company != null) {
+            company.setName(newCompany.getName());
+            return true;
+        }
+        return false;
     }
 
 }

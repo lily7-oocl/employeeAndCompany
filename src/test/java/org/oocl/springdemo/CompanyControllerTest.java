@@ -9,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,5 +49,23 @@ public class CompanyControllerTest {
         mockMvc.perform(get("/companies/{id}",1))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("spring"));
+    }
+
+    @Test
+    public void should_return_true_when_update_company_given_id_and_company() throws Exception {
+        String requestBody = """
+                {
+                    "name": "fall"
+                }
+                """;
+        companyController.createCompany(new Company("spring"));
+        mockMvc.perform(put("/companies/{id}",1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(true));
+        mockMvc.perform(get("/companies/{id}",1))
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("fall"));
     }
 }
