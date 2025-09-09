@@ -28,7 +28,7 @@ public class EmployeeController {
 
     @GetMapping("/employees")
     public List<Employee> getEmployeesByGender(@RequestParam(required = false) String gender) {
-        return gender!=null ? employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList())
+        return gender != null ? employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList())
                 : employees;
     }
 
@@ -56,6 +56,10 @@ public class EmployeeController {
         int start = (page - 1) * pageSize;
         int end = Math.min(start + pageSize, employees.size());
         return employees.subList(start, end);
+    }
+
+    public void clearEmployees() {
+        employees.clear();
     }
 
 }

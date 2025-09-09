@@ -1,5 +1,6 @@
 package org.oocl.springdemo;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.EmployeeController;
 import org.oocl.springdemo.pojo.Employee;
@@ -22,6 +23,11 @@ public class EmployeeControllerTest {
     @Autowired
     private EmployeeController employeeController;
 
+    @BeforeEach
+    void setUp() {
+        employeeController.clearEmployees();
+    }
+
     @Test
     public void should_return_id_when_create_employee_given_employee() throws Exception {
         String requestBody = """
@@ -41,23 +47,8 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_employee_when_get_employee_given_id() throws Exception {
-        String RequestBody = """
-                {
-                    "name": "TOM",
-                    "age": 18,
-                    "gender": "Male",
-                    "salary": 5000.0
-                }
-                """;
-        Employee employee = new Employee();
-        employee.setName("TOM");
-        employee.setAge(18);
-        employee.setGender("Male");
-        employee.setSalary(5000.0);
-        employeeController.createEmployee(employee);
-        mockMvc.perform(get("/employee/{id}",1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(RequestBody))
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        mockMvc.perform(get("/employee/{id}",1))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("TOM"))
                 .andExpect(jsonPath("$.age").value(18))
@@ -67,31 +58,10 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_employees_when_get_employees_given_gender() throws Exception {
-        String RequestBody = """
-                {
-                    "id": 1,
-                    "name": "TOM",
-                    "age": 18,
-                    "gender": "Male",
-                    "salary": 5000.0
-                }
-                """;
-        Employee employee = new Employee();
-        employee.setName("TOM");
-        employee.setAge(18);
-        employee.setGender("Male");
-        employee.setSalary(5000.0);
-        Employee employee2 = new Employee();
-        Employee employee3 = new Employee();
-        BeanUtils.copyProperties(employee, employee2);
-        BeanUtils.copyProperties(employee, employee3);
-        employee2.setGender("Female");
-        employeeController.createEmployee(employee);
-        employeeController.createEmployee(employee2);
-        employeeController.createEmployee(employee3);
-        mockMvc.perform(get("/employees?gender=Male")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(RequestBody))
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        employeeController.createEmployee(new Employee("TOM", 18, "Female", 5000.0));
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        mockMvc.perform(get("/employees?gender=Male"))
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("TOM"))
                 .andExpect(jsonPath("$[0].age").value(18))
@@ -106,27 +76,9 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_employees_when_get_employees() throws Exception {
-        String RequestBody = """
-                {
-                    "name": "TOM",
-                    "age": 18,
-                    "gender": "Male",
-                    "salary": 5000.0
-                }
-                """;
-        Employee employee = new Employee();
-        employee.setName("TOM");
-        employee.setAge(18);
-        employee.setGender("Male");
-        employee.setSalary(5000.0);
-        Employee employee2 = new Employee();
-        BeanUtils.copyProperties(employee, employee2);
-        employee2.setGender("Female");
-        employeeController.createEmployee(employee);
-        employeeController.createEmployee(employee2);
-        mockMvc.perform(get("/employees")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(RequestBody))
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        employeeController.createEmployee(new Employee("TOM", 18, "Female", 5000.0));
+        mockMvc.perform(get("/employees"))
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("TOM"))
                 .andExpect(jsonPath("$[0].age").value(18))
@@ -149,12 +101,7 @@ public class EmployeeControllerTest {
                     "salary": 50000.0
                 }
                 """;
-        Employee employee = new Employee();
-        employee.setName("TOM");
-        employee.setAge(18);
-        employee.setGender("Male");
-        employee.setSalary(5000.0);
-        employeeController.createEmployee(employee);
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
         mockMvc.perform(put("/employees/{id}",1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(RequestBody))
@@ -172,52 +119,17 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_no_content_when_delete_employees_by_id() throws Exception {
-        String RequestBody = """
-                {
-                    "name": "Jack",
-                    "age": 20,
-                    "gender": "Female",
-                    "salary": 50000.0
-                }
-                """;
-        Employee employee = new Employee();
-        employee.setName("TOM");
-        employee.setAge(18);
-        employee.setGender("Male");
-        employee.setSalary(5000.0);
-        employeeController.createEmployee(employee);
-        mockMvc.perform(delete("/employees/{id}",1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(RequestBody))
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        mockMvc.perform(delete("/employees/{id}",1))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     public void should_return_employees_when_get_employees_by_page() throws Exception {
-        String RequestBody = """
-                {
-                    "id": 1,
-                    "name": "TOM",
-                    "age": 18,
-                    "gender": "Male",
-                    "salary": 5000.0
-                }
-                """;
-        Employee employee = new Employee();
-        employee.setName("TOM");
-        employee.setAge(18);
-        employee.setGender("Male");
-        employee.setSalary(5000.0);
-        Employee employee2 = new Employee();
-        Employee employee3 = new Employee();
-        BeanUtils.copyProperties(employee, employee2);
-        BeanUtils.copyProperties(employee, employee3);
-        employeeController.createEmployee(employee);
-        employeeController.createEmployee(employee2);
-        employeeController.createEmployee(employee3);
-        mockMvc.perform(get("/employees?page=1&pageSize=2")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(RequestBody))
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        mockMvc.perform(get("/employees?page=1&pageSize=2"))
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("TOM"))
                 .andExpect(jsonPath("$[0].age").value(18))
