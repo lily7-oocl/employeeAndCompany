@@ -41,14 +41,6 @@ public class employeeControllerTest {
 
     @Test
     public void should_return_employee_when_get_employee_given_id() throws Exception {
-        String addRequestBody = """
-                {
-                    "name": "TOM",
-                    "age": 18,
-                    "gender": "Male",
-                    "salary": 5000.0
-                }
-                """;
         String RequestBody = """
                 {
                     "id": 1,
