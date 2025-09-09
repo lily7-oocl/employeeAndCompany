@@ -14,19 +14,23 @@ import java.util.stream.Collectors;
 @RestController
 public class EmployeeController {
     List<Employee> employees = new ArrayList<>();
+
     @PostMapping("/employee")
-    public ResponseEntity<Map<String,Integer>> createEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<Map<String, Integer>> createEmployee(@RequestBody Employee employee) {
         employee.setId(employees.size() + 1);
         employees.add(employee);
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id",employee.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", employee.getId()));
     }
+
     @GetMapping("/employee/{id}")
     public Employee getEmployee(@PathVariable("id") int id) {
         return employees.stream().filter(employee -> employee.getId() == id).findFirst().orElse(null);
     }
+
     @GetMapping("/employees")
-    public List<Employee> getEmployees(@RequestParam String gender) {
-        return employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
+    public List<Employee> getEmployeesByGender(@RequestParam(required = false) String gender) {
+        return gender!=null ? employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList())
+                : employees;
     }
 
 }

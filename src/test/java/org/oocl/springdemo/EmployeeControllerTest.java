@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class employeeControllerTest {
+public class EmployeeControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -44,7 +44,6 @@ public class employeeControllerTest {
     public void should_return_employee_when_get_employee_given_id() throws Exception {
         String RequestBody = """
                 {
-                    "id": 1,
                     "name": "TOM",
                     "age": 18,
                     "gender": "Male",
@@ -68,7 +67,7 @@ public class employeeControllerTest {
     }
 
     @Test
-    public void should_return_employees_when_get_employee_given_gender() throws Exception {
+    public void should_return_employees_when_get_employees_given_gender() throws Exception {
         String RequestBody = """
                 {
                     "id": 1,
@@ -103,6 +102,41 @@ public class employeeControllerTest {
                 .andExpect(jsonPath("$[1].name").value("TOM"))
                 .andExpect(jsonPath("$[1].age").value(18))
                 .andExpect(jsonPath("$[1].gender").value("Male"))
+                .andExpect(jsonPath("$[1].salary").value(5000.0));
+    }
+
+    @Test
+    public void should_return_employees_when_get_employees() throws Exception {
+        String RequestBody = """
+                {
+                    "name": "TOM",
+                    "age": 18,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
+        Employee employee = new Employee();
+        employee.setName("TOM");
+        employee.setAge(18);
+        employee.setGender("Male");
+        employee.setSalary(5000.0);
+        Employee employee2 = new Employee();
+        BeanUtils.copyProperties(employee, employee2);
+        employee2.setGender("Female");
+        employeeController.createEmployee(employee);
+        employeeController.createEmployee(employee2);
+        mockMvc.perform(get("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(RequestBody))
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("TOM"))
+                .andExpect(jsonPath("$[0].age").value(18))
+                .andExpect(jsonPath("$[0].gender").value("Male"))
+                .andExpect(jsonPath("$[0].salary").value(5000.0))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].name").value("TOM"))
+                .andExpect(jsonPath("$[1].age").value(18))
+                .andExpect(jsonPath("$[1].gender").value("Female"))
                 .andExpect(jsonPath("$[1].salary").value(5000.0));
     }
 }
