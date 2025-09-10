@@ -93,4 +93,12 @@ public class EmployeeServiceTest {
         when(employeeDao.getById(1)).thenReturn(new Employee("Tom", 18, "Male", 5000.0,true));
         assertDoesNotThrow(() -> employeeService.updateEmployee(1, newEmployee));
     }
+
+    @Test
+    public void should_update_employee_when_update_employee_given_not_exist_id_and_new_employee() {
+        Employee newEmployee = new Employee("Jerry", 18, "Male", 5000);
+        when(employeeDao.getById(1)).thenReturn(null);
+        assertThrows(EmployeeException.class, () -> employeeService.updateEmployee(1,newEmployee));
+        verify(employeeDao, times(0)).update(any(),any());
+    }
 }
