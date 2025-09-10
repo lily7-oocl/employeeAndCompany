@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-    @ExceptionHandler(RuntimeException.class)
-    public String handleMyException(RuntimeException e) {
+    @ExceptionHandler(EmployeeException.class)
+    public String handleEmployeeException(EmployeeException e) {
         return e.getMessage();
     }
 
-    @ExceptionHandler(ArithmeticException.class)
-    public String handleMyException(ArithmeticException e) {
+    @ExceptionHandler(CompanyException.class)
+    public String handleCompanyException(CompanyException e) {
         return e.getMessage();
     }
 }

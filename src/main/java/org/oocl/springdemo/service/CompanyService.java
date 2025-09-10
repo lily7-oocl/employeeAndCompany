@@ -1,6 +1,7 @@
 package org.oocl.springdemo.service;
 
 import org.oocl.springdemo.dao.CompanyDao;
+import org.oocl.springdemo.exception.CompanyException;
 import org.oocl.springdemo.pojo.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,12 @@ public class CompanyService {
     }
 
     public Company getCompanyById(int id) {
-        return companyDao.getCompanyById(id);
+        return companyDao.getById(id);
     }
 
     public void updateCompany(int id, Company newCompany) {
-        companyDao.update(id, newCompany);
+        Company company = companyDao.getById(id);
+        companyDao.update(company, newCompany);
     }
 
     public void deleteCompanyById(int id) {

@@ -31,7 +31,8 @@ public class EmployeeService {
     }
 
     public void updateEmployee(int id, Employee newEmployee) {
-        employeeDao.update(id, newEmployee);
+        Employee employee = employeeDao.getById(id);
+        employeeDao.update(employee,newEmployee);
     }
 
     public void deleteEmployee(int id) {

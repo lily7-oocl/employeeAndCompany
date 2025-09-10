@@ -22,15 +22,12 @@ public class CompanyDao {
         return company.getId();
     }
 
-    public Company getCompanyById(int id) {
+    public Company getById(int id) {
         return companies.stream().filter(company -> company.getId() == id).findFirst().orElse(null);
     }
 
-    public void update(int id, Company newCompany) {
-        Company company = companies.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
-        if (company != null) {
+    public void update(Company company, Company newCompany) {
             company.setName(newCompany.getName());
-        }
     }
 
     public void deleteById(int id) {

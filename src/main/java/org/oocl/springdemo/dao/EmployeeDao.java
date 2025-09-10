@@ -31,14 +31,11 @@ public class EmployeeDao {
         return employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
     }
 
-    public void update(int id, Employee newEmployee) {
-        Employee employee = getById(id);
-        if (employee != null) {
+    public void update(Employee employee, Employee newEmployee) {
             employee.setName(newEmployee.getName());
             employee.setAge(newEmployee.getAge());
             employee.setGender(newEmployee.getGender());
             employee.setSalary(newEmployee.getSalary());
-        }
     }
 
     public void removeById(int id) {
