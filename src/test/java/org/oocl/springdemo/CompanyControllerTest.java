@@ -70,8 +70,7 @@ public class CompanyControllerTest {
         mockMvc.perform(put("/companies/{id}",1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(true));
+                .andExpect(status().isNoContent());
         mockMvc.perform(get("/companies/{id}",1))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("fall"));

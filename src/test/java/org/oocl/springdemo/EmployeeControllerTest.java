@@ -38,7 +38,7 @@ public class EmployeeControllerTest {
                     "salary": 5000.0
                 }
                 """;
-        mockMvc.perform(post("/employee")
+        mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody))
                 .andExpect(status().isCreated())
@@ -48,7 +48,7 @@ public class EmployeeControllerTest {
     @Test
     public void should_return_employee_when_get_employee_given_id() throws Exception {
         employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
-        mockMvc.perform(get("/employee/{id}",1))
+        mockMvc.perform(get("/employees/{id}",1))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("TOM"))
                 .andExpect(jsonPath("$.age").value(18))
@@ -105,9 +105,8 @@ public class EmployeeControllerTest {
         mockMvc.perform(put("/employees/{id}",1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(RequestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(true));
-        mockMvc.perform(get("/employee/{id}",1)
+                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/employees/{id}",1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(RequestBody))
                 .andExpect(jsonPath("$.id").value(1))
