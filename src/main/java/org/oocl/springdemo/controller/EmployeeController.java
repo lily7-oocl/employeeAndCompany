@@ -16,22 +16,15 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping("/employees")
-    public ResponseEntity<Map<String, Integer>> createEmployee(@RequestBody Employee employee) {
-        try {
-            return ResponseEntity.ok().body(employeeService.createEmployee(employee));
-        }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public Map<String, Integer> createEmployee(@RequestBody Employee employee) {
+        return employeeService.createEmployee(employee);
     }
 
     @GetMapping("/employees/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") int id) {
-        try {
-            return ResponseEntity.ok().body(employeeService.getEmployeeById(id));
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public Employee getEmployeeById(@PathVariable("id") int id) {
+        return employeeService.getEmployeeById(id);
     }
 
     @GetMapping(value = "/employees", params = {"gender"})

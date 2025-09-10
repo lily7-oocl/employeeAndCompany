@@ -1,14 +1,15 @@
 package org.oocl.springdemo.service;
 
+import org.oocl.springdemo.common.EmployeeErrorStatus;
 import org.oocl.springdemo.dao.EmployeeDao;
-import org.oocl.springdemo.exception.EmployeeNotFoundException;
-import org.oocl.springdemo.exception.EmployeeNotInAmongAgeException;
+import org.oocl.springdemo.exception.EmployeeException;
 import org.oocl.springdemo.pojo.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
 
 @Service
 public class EmployeeService {
@@ -17,7 +18,7 @@ public class EmployeeService {
 
     public Map<String, Integer> createEmployee(Employee employee) {
         if (employee.getAge()<18 || employee.getAge()>65) {
-            throw new EmployeeNotInAmongAgeException();
+            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_IN_AMONG_AGE);
         }
         int id = employeeDao.create(employee);
         return Map.of("id", id);
@@ -26,7 +27,7 @@ public class EmployeeService {
     public Employee getEmployeeById(int id) {
         Employee employee = employeeDao.getById(id);
         if (employee == null) {
-            throw new EmployeeNotFoundException();
+            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_FOUND);
         }
         return employee;
     }
