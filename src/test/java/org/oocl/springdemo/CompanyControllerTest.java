@@ -3,6 +3,7 @@ package org.oocl.springdemo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.CompanyController;
+import org.oocl.springdemo.dao.CompanyDao;
 import org.oocl.springdemo.pojo.Company;
 import org.oocl.springdemo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,11 @@ public class CompanyControllerTest {
     @Autowired
     private CompanyController companyController;
     @Autowired
-    private CompanyService companyService;
+    private CompanyDao companyDao;
 
     @BeforeEach
     void setUp() {
-        companyService.clearCompanies();
+        companyDao.deleteAll();
     }
 
     @Test

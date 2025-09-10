@@ -25,8 +25,8 @@ public class EmployeeController {
 
     @GetMapping("/employees/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee getEmployee(@PathVariable("id") int id) {
-        return employeeService.getEmployee(id);
+    public Employee getEmployeeById(@PathVariable("id") int id) {
+        return employeeService.getEmployeeById(id);
     }
 
     @GetMapping(value = "/employees",params = {"gender"})

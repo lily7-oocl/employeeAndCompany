@@ -1,6 +1,8 @@
 package org.oocl.springdemo.service;
 
+import org.oocl.springdemo.dao.CompanyDao;
 import org.oocl.springdemo.pojo.Company;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,45 +10,30 @@ import java.util.List;
 
 @Service
 public class CompanyService {
-    private final List<Company> companies = new ArrayList<>();
-    private int id = 0;
-
-    public void clearCompanies() {
-        companies.clear();
-        this.id = 0;
-    }
+    @Autowired
+    private CompanyDao companyDao;
 
     public int addCompany(Company company) {
-        company.setId(++this.id);
-        companies.add(company);
-        return company.getId();
+        return companyDao.add(company);
     }
 
     public Company getCompanyById(int id) {
-        return companies.stream().filter(company -> company.getId() == id).findFirst().orElse(null);
+        return companyDao.getCompanyById(id);
     }
 
-    public void updateCompany(Company newCompany) {
-        Company company = companies.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
-        if (company != null) {
-            company.setName(newCompany.getName());
-        }
+    public void updateCompany(int id,Company newCompany) {
+        companyDao.update(id,newCompany);
     }
 
     public void deleteCompanyById(int id) {
-        companies.removeIf(company -> company.getId() == id);
+        companyDao.deleteById(id);
     }
 
     public List<Company> getCompanyByPage(int page, int pageSize) {
-        if (page < 0) {
-            return null;
-        }
-        int start = (page - 1) * pageSize;
-        int end = Math.min(start + pageSize, companies.size());
-        return companies.subList(start, end);
+        return companyDao.getByPage(page,pageSize);
     }
 
     public List<Company> getCompanies() {
-        return companies;
+        return companyDao.getAll();
     }
 }

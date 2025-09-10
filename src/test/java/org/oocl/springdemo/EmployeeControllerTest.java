@@ -3,6 +3,7 @@ package org.oocl.springdemo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.EmployeeController;
+import org.oocl.springdemo.dao.EmployeeDao;
 import org.oocl.springdemo.pojo.Employee;
 import org.oocl.springdemo.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
@@ -24,11 +25,11 @@ public class EmployeeControllerTest {
     @Autowired
     private EmployeeController employeeController;
     @Autowired
-    private EmployeeService employeeService;
+    private EmployeeDao employeeDao;
 
     @BeforeEach
     void setUp() {
-        employeeService.clearEmployees();
+        employeeDao.deleteAll();
     }
 
     @Test
