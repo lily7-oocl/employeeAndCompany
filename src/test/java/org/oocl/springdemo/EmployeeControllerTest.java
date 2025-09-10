@@ -145,7 +145,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_return_true_when_update_employee_given_id_and_employee() throws Exception {
+    public void should_return_no_content_when_update_employee_given_exist_id_and_new_employee() throws Exception {
         String RequestBody = """
                 {
                     "name": "Jack",
@@ -167,6 +167,22 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.age").value(20))
                 .andExpect(jsonPath("$.gender").value("Female"))
                 .andExpect(jsonPath("$.salary").value(50000.0));
+    }
+
+    @Test
+    public void should_return_bad_request_when_update_employee_given_not_exist_id_and_new_employee() throws Exception {
+        String RequestBody = """
+                {
+                    "name": "Jack",
+                    "age": 20,
+                    "gender": "Female",
+                    "salary": 50000.0
+                }
+                """;
+        mockMvc.perform(put("/employees/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(RequestBody))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
