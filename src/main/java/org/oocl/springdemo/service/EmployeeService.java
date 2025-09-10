@@ -5,10 +5,8 @@ import org.oocl.springdemo.pojo.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -33,7 +31,7 @@ public class EmployeeService {
     }
 
     public void updateEmployee(int id, Employee newEmployee) {
-        employeeDao.update(id,newEmployee);
+        employeeDao.update(id, newEmployee);
     }
 
     public void deleteEmployee(int id) {
@@ -41,6 +39,6 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeesByPage(int page, int pageSize) {
-        return employeeDao.getByPage(page,pageSize);
+        return employeeDao.getByPage(page, pageSize);
     }
 }

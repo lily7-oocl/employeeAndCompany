@@ -5,7 +5,6 @@ import org.oocl.springdemo.pojo.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,8 +20,8 @@ public class CompanyService {
         return companyDao.getCompanyById(id);
     }
 
-    public void updateCompany(int id,Company newCompany) {
-        companyDao.update(id,newCompany);
+    public void updateCompany(int id, Company newCompany) {
+        companyDao.update(id, newCompany);
     }
 
     public void deleteCompanyById(int id) {
@@ -30,7 +29,7 @@ public class CompanyService {
     }
 
     public List<Company> getCompanyByPage(int page, int pageSize) {
-        return companyDao.getByPage(page,pageSize);
+        return companyDao.getByPage(page, pageSize);
     }
 
     public List<Company> getCompanies() {

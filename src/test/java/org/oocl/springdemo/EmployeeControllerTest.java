@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.EmployeeController;
 import org.oocl.springdemo.dao.EmployeeDao;
 import org.oocl.springdemo.pojo.Employee;
-import org.oocl.springdemo.service.EmployeeService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,8 +41,8 @@ public class EmployeeControllerTest {
                 }
                 """;
         mockMvc.perform(post("/employees")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1));
     }
@@ -52,7 +50,7 @@ public class EmployeeControllerTest {
     @Test
     public void should_return_employee_when_get_employee_given_id() throws Exception {
         employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
-        mockMvc.perform(get("/employees/{id}",1))
+        mockMvc.perform(get("/employees/{id}", 1))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("TOM"))
                 .andExpect(jsonPath("$.age").value(18))
@@ -106,11 +104,11 @@ public class EmployeeControllerTest {
                 }
                 """;
         employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
-        mockMvc.perform(put("/employees/{id}",1)
+        mockMvc.perform(put("/employees/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(RequestBody))
                 .andExpect(status().isNoContent());
-        mockMvc.perform(get("/employees/{id}",1)
+        mockMvc.perform(get("/employees/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(RequestBody))
                 .andExpect(jsonPath("$.id").value(1))
@@ -123,7 +121,7 @@ public class EmployeeControllerTest {
     @Test
     public void should_return_no_content_when_delete_employees_by_id() throws Exception {
         employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
-        mockMvc.perform(delete("/employees/{id}",1))
+        mockMvc.perform(delete("/employees/{id}", 1))
                 .andExpect(status().isNoContent());
     }
 

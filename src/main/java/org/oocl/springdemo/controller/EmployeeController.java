@@ -7,10 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 public class EmployeeController {
@@ -29,7 +27,7 @@ public class EmployeeController {
         return employeeService.getEmployeeById(id);
     }
 
-    @GetMapping(value = "/employees",params = {"gender"})
+    @GetMapping(value = "/employees", params = {"gender"})
     public List<Employee> getEmployeesByGender(@RequestParam String gender) {
         return employeeService.getEmployeesByGender(gender);
     }
@@ -42,7 +40,7 @@ public class EmployeeController {
 
     @PutMapping("/employees/{id}")
     public ResponseEntity<Void> updateEmployee(@PathVariable("id") int id, @RequestBody Employee newEmployee) {
-        employeeService.updateEmployee(id,newEmployee);
+        employeeService.updateEmployee(id, newEmployee);
         return ResponseEntity.noContent().build();
     }
 
@@ -52,8 +50,8 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping(path="/employees",params = {"page","pageSize"})
+    @GetMapping(path = "/employees", params = {"page", "pageSize"})
     public List<Employee> getEmployeesByPage(@RequestParam int page, @RequestParam int pageSize) {
-        return employeeService.getEmployeesByPage(page,pageSize);
+        return employeeService.getEmployeesByPage(page, pageSize);
     }
 }

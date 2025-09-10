@@ -26,7 +26,7 @@ public class CompanyDao {
         return companies.stream().filter(company -> company.getId() == id).findFirst().orElse(null);
     }
 
-    public void update(int id,Company newCompany) {
+    public void update(int id, Company newCompany) {
         Company company = companies.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
         if (company != null) {
             company.setName(newCompany.getName());

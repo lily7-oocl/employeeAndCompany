@@ -49,7 +49,8 @@ public class Employee implements Serializable {
         this.salary = salary;
     }
 
-    public Employee(){}
+    public Employee() {
+    }
 
     public Employee(String name, int age, String gender, double salary) {
         this.name = name;

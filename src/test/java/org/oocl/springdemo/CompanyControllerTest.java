@@ -5,11 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.CompanyController;
 import org.oocl.springdemo.dao.CompanyDao;
 import org.oocl.springdemo.pojo.Company;
-import org.oocl.springdemo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -58,7 +56,7 @@ public class CompanyControllerTest {
     @Test
     public void should_return_company_when_get_company_given_id() throws Exception {
         companyController.createCompany(new Company("spring"));
-        mockMvc.perform(get("/companies/{id}",1))
+        mockMvc.perform(get("/companies/{id}", 1))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("spring"));
     }
@@ -71,11 +69,11 @@ public class CompanyControllerTest {
                 }
                 """;
         companyController.createCompany(new Company("spring"));
-        mockMvc.perform(put("/companies/{id}",1)
+        mockMvc.perform(put("/companies/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isNoContent());
-        mockMvc.perform(get("/companies/{id}",1))
+        mockMvc.perform(get("/companies/{id}", 1))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("fall"));
     }
@@ -83,7 +81,7 @@ public class CompanyControllerTest {
     @Test
     public void should_return_no_content_when_delete_company_given_id() throws Exception {
         companyController.createCompany(new Company("spring"));
-        mockMvc.perform(delete("/companies/{id}",1))
+        mockMvc.perform(delete("/companies/{id}", 1))
                 .andExpect(status().isNoContent());
     }
 
@@ -91,7 +89,7 @@ public class CompanyControllerTest {
     public void should_return_companies_when_get_companies_by_page_given_page_and_pageSize() throws Exception {
         companyController.createCompany(new Company("spring"));
         companyController.createCompany(new Company("fall"));
-        mockMvc.perform(get("/companies?page={page}&pageSize={pageSize}",1,1))
+        mockMvc.perform(get("/companies?page={page}&pageSize={pageSize}", 1, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("spring"));

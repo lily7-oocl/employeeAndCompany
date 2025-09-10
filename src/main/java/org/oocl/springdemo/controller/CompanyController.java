@@ -1,14 +1,12 @@
 package org.oocl.springdemo.controller;
 
 import org.oocl.springdemo.pojo.Company;
-import org.oocl.springdemo.pojo.Employee;
 import org.oocl.springdemo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +36,7 @@ public class CompanyController {
 
     @PutMapping("/companies/{id}")
     public ResponseEntity<Void> updateCompany(@PathVariable("id") int id, @RequestBody Company newCompany) {
-        companyService.updateCompany(id,newCompany);
+        companyService.updateCompany(id, newCompany);
         return ResponseEntity.noContent().build();
     }
 
@@ -48,9 +46,9 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping(path = "/companies",params = {"page","pageSize"})
+    @GetMapping(path = "/companies", params = {"page", "pageSize"})
     @ResponseStatus(HttpStatus.OK)
     public List<Company> getCompaniesByPage(@RequestParam int page, @RequestParam int pageSize) {
-        return companyService.getCompanyByPage(page,pageSize);
+        return companyService.getCompanyByPage(page, pageSize);
     }
 }
