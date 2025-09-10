@@ -34,7 +34,7 @@ public class EmployeeController {
 
     @GetMapping(value = "/employees")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getEmployeesByGender() {
+    public List<Employee> getEmployees() {
         return employeeService.getEmployees();
     }
 

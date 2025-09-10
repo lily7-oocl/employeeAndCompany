@@ -10,6 +10,7 @@ import org.oocl.springdemo.pojo.Employee;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,7 +64,7 @@ public class EmployeeServiceTest {
     public void should_return_employee_when_get_given_exist_id() {
         Employee employee = new Employee("Tom", 18, "Male", 5000.0);
         when(employeeDao.getById(1)).thenReturn(employee);
-        assertEquals(employee, employeeDao.getById(1));
+        assertEquals(employee, employeeService.getEmployeeById(1));
         verify(employeeDao, times(1)).getById(1);
     }
 
@@ -119,4 +120,26 @@ public class EmployeeServiceTest {
         assertEquals(EMPLOYEE_ALREADY_DELETED.getMessage(), employeeAlreadyDeletedException.getMessage());
         verify(employeeDao, times(0)).update(any(),any());
     }
+
+    @Test
+    public void should_return_list_of_employee_when_get_employee_given_gender(){
+        List<Employee> listGetByGender = List.of(new Employee("Tom", 18, "Male", 5000.0, true));
+        when(employeeDao.getByGender("Male")).thenReturn(listGetByGender);
+        assertEquals(listGetByGender,employeeService.getEmployeesByGender("Male"));
+    }
+
+    @Test
+    public void should_return_all_list_of_employee_when_get_employee_given_gender(){
+        List<Employee> listGetByGender = List.of(new Employee("Tom", 18, "Male", 5000.0, true));
+        when(employeeDao.getAll()).thenReturn(listGetByGender);
+        assertEquals(listGetByGender,employeeService.getEmployees());
+    }
+
+    @Test
+    public void should_return_list_of_employee_when_get_employee_given_page_and_pageSize() {
+        List<Employee> listGetByPage = List.of(new Employee("Tom", 18, "Male", 5000.0, true));
+        when(employeeDao.getByPage(1, 1)).thenReturn(listGetByPage);
+        assertEquals(listGetByPage, employeeService.getEmployeesByPage(1, 1));
+    }
 }
+
