@@ -15,7 +15,7 @@ public class EmployeeService {
 
     public Map<String, Integer> createEmployee(Employee employee) {
         int id = employeeDao.create(employee);
-        return Map.of("id", employee.getId());
+        return Map.of("id", id);
     }
 
     public Employee getEmployeeById(int id) {
