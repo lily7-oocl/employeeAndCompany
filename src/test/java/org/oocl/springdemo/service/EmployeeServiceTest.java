@@ -79,7 +79,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void should_not_change_employee_status_when_delete_employee_given_already_deleted_employee() {
+    public void should_not_change_employee_status_when_delete_employee_given_already_deleted_employee_id() {
         Employee employee = new Employee("Tom", 18, "Male", 5000.0,false);
         when(employeeDao.getById(1)).thenReturn(employee);
         when(employeeDao.removeById(1)).thenReturn(true);

@@ -183,6 +183,14 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    public void should_return_bad_request_when_delete_employees_by_already_deleted_employee_id() throws Exception {
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,false));
+        employeeController.deleteEmployeeById(1);
+        mockMvc.perform(delete("/employees/{id}", 1))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void should_return_employees_when_get_employees_by_page() throws Exception {
         employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
         employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
