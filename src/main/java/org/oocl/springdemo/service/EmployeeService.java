@@ -1,6 +1,7 @@
 package org.oocl.springdemo.service;
 
 import org.oocl.springdemo.dao.EmployeeDao;
+import org.oocl.springdemo.exception.EmployeeNotInAmongAgeException;
 import org.oocl.springdemo.pojo.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class EmployeeService {
     private EmployeeDao employeeDao;
 
     public Map<String, Integer> createEmployee(Employee employee) {
+        if (employee.getAge()<18 || employee.getAge()>65) {
+            throw new EmployeeNotInAmongAgeException();
+        }
         int id = employeeDao.create(employee);
         return Map.of("id", id);
     }

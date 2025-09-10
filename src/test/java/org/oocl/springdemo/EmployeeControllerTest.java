@@ -48,6 +48,22 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    public void should_return_bad_request_when_create_employee_given_employee_that_has_invalid_age() throws Exception {
+        String requestBody = """
+                {
+                    "name": "TOM",
+                    "age": 17,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void should_return_employee_when_get_employee_given_id() throws Exception {
         employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
         mockMvc.perform(get("/employees/{id}", 1))

@@ -16,9 +16,12 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping("/employees")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Integer> createEmployee(@RequestBody Employee employee) {
-        return employeeService.createEmployee(employee);
+    public ResponseEntity<Map<String, Integer>> createEmployee(@RequestBody Employee employee) {
+        try {
+            return ResponseEntity.ok().body(employeeService.createEmployee(employee));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("/employees/{id}")
