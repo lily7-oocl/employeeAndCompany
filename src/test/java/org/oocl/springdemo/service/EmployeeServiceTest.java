@@ -64,17 +64,26 @@ public class EmployeeServiceTest {
 
     @Test
     public void should_change_employee_status_when_delete_employ_given_exist_id() {
-        Employee employee = new Employee("Tom", 18, "Male", 5000.0);
-        when(employeeDao.create(employee)).thenReturn(employee.getId());
+        Employee employee = new Employee("Tom", 18, "Male", 5000.0,true);
         when(employeeDao.getById(1)).thenReturn(employee);
         when(employeeDao.removeById(1)).thenReturn(true);
-        assertTrue(employeeDao.removeById(1));
+        assertDoesNotThrow(() -> employeeService.deleteEmployeeById(1));
+        verify(employeeDao, times(1)).removeById(1);
     }
 
     @Test
     public void should_not_change_employee_status_when_delete_employee_given_not_exist_id() {
         when(employeeDao.getById(1)).thenReturn(null);
-        assertThrows(EmployeeException.class, () -> employeeService.deleteEmployee(1));
+        assertThrows(EmployeeException.class, () -> employeeService.deleteEmployeeById(1));
         verify(employeeDao, times(1)).getById(1);
+    }
+
+    @Test
+    public void should_not_change_employee_status_when_delete_employee_given_already_deleted_employee() {
+        Employee employee = new Employee("Tom", 18, "Male", 5000.0,false);
+        when(employeeDao.getById(1)).thenReturn(employee);
+        when(employeeDao.removeById(1)).thenReturn(true);
+        assertThrows(EmployeeException.class, () -> employeeService.deleteEmployeeById(1));
+        verify(employeeDao, times(0)).removeById(1);
     }
 }

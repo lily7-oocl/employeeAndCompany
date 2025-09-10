@@ -48,7 +48,7 @@ public class EmployeeService {
         employeeDao.update(employee,newEmployee);
     }
 
-    public void deleteEmployee(int id) {
+    public void deleteEmployeeById(int id) {
         Employee employee = employeeDao.getById(id);
         if (employee == null) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_FOUND);
