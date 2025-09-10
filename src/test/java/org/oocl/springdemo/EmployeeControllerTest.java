@@ -87,6 +87,13 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    public void should_return_bad_request_when_get_employee_that_is_null_given_id() throws Exception {
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        mockMvc.perform(get("/employees/{id}", 2))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void should_return_employees_when_get_employees_given_gender() throws Exception {
         employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
         employeeController.createEmployee(new Employee("TOM", 18, "Female", 5000.0));

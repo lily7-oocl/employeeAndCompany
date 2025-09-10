@@ -1,6 +1,7 @@
 package org.oocl.springdemo.service;
 
 import org.oocl.springdemo.dao.EmployeeDao;
+import org.oocl.springdemo.exception.EmployeeNotFoundException;
 import org.oocl.springdemo.exception.EmployeeNotInAmongAgeException;
 import org.oocl.springdemo.pojo.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,11 @@ public class EmployeeService {
     }
 
     public Employee getEmployeeById(int id) {
-        return employeeDao.getById(id);
+        Employee employee = employeeDao.getById(id);
+        if (employee == null) {
+            throw new EmployeeNotFoundException();
+        }
+        return employee;
     }
 
     public List<Employee> getEmployeesByGender(String gender) {

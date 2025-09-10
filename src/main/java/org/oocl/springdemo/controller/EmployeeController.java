@@ -26,8 +26,12 @@ public class EmployeeController {
 
     @GetMapping("/employees/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee getEmployeeById(@PathVariable("id") int id) {
-        return employeeService.getEmployeeById(id);
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") int id) {
+        try {
+            return ResponseEntity.ok().body(employeeService.getEmployeeById(id));
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping(value = "/employees", params = {"gender"})
