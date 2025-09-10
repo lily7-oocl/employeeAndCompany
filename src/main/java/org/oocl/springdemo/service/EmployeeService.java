@@ -49,6 +49,13 @@ public class EmployeeService {
     }
 
     public void deleteEmployee(int id) {
+        Employee employee = employeeDao.getById(id);
+        if (employee == null) {
+            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_FOUND);
+        }
+        if (!employee.getStatus()){
+            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_ALREADY_DELETED);
+        }
         employeeDao.removeById(id);
     }
 

@@ -39,8 +39,15 @@ public class EmployeeDao {
             employee.setSalary(newEmployee.getSalary());
     }
 
-    public void removeById(int id) {
-        employees.removeIf(employee -> employee.getId() == id);
+    public boolean removeById(int id) {
+        return employees.stream()
+                .filter(employee -> employee.getId() == id)
+                .findFirst()
+                .map(employee -> {
+                    employee.setStatus(false);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public List<Employee> getByPage(int page, int pageSize) {

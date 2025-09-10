@@ -12,8 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -56,5 +55,13 @@ public class EmployeeServiceTest {
         when(employeeDao.getById(1)).thenReturn(employee);
         assertEquals(employee,employeeDao.getById(1));
         verify(employeeDao,times(1)).getById(1);
+    }
+    @Test
+    public void should_change_employee_status_when_delete_employ_given_exist_id(){
+        Employee employee = new Employee("Tom", 18, "Male", 5000.0);
+        when(employeeDao.create(employee)).thenReturn(employee.getId());
+        when(employeeDao.getById(1)).thenReturn(employee);
+        when(employeeDao.removeById(1)).thenReturn(true);
+        assertTrue(employeeDao.removeById(1));
     }
 }
