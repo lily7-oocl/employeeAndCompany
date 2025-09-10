@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.CompanyController;
 import org.oocl.springdemo.pojo.Company;
+import org.oocl.springdemo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,10 +23,12 @@ public class CompanyControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private CompanyController companyController;
+    @Autowired
+    private CompanyService companyService;
 
     @BeforeEach
     void setUp() {
-        companyController.clearCompanies();
+        companyService.clearCompanies();
     }
 
     @Test

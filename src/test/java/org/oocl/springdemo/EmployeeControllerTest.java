@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.EmployeeController;
 import org.oocl.springdemo.pojo.Employee;
+import org.oocl.springdemo.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,10 +23,12 @@ public class EmployeeControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private EmployeeController employeeController;
+    @Autowired
+    private EmployeeService employeeService;
 
     @BeforeEach
     void setUp() {
-        employeeController.clearEmployees();
+        employeeService.clearEmployees();
     }
 
     @Test
