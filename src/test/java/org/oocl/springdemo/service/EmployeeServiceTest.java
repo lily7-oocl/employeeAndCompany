@@ -95,9 +95,18 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void should_update_employee_when_update_employee_given_not_exist_id_and_new_employee() {
+    public void should_not_update_employee_when_update_employee_given_not_exist_id_and_new_employee() {
         Employee newEmployee = new Employee("Jerry", 18, "Male", 5000);
         when(employeeDao.getById(1)).thenReturn(null);
+        assertThrows(EmployeeException.class, () -> employeeService.updateEmployee(1,newEmployee));
+        verify(employeeDao, times(0)).update(any(),any());
+    }
+
+    @Test
+    public void should_not_update_employee_when_update_employee_given_exist_id_that_is_deleted_and_new_employee() {
+        Employee newEmployee = new Employee("Jerry", 18, "Male", 5000);
+        Employee oldEmployee = new Employee("Jerry", 18, "Male", 5000,false);
+        when(employeeDao.getById(1)).thenReturn(oldEmployee);
         assertThrows(EmployeeException.class, () -> employeeService.updateEmployee(1,newEmployee));
         verify(employeeDao, times(0)).update(any(),any());
     }
