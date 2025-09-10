@@ -22,20 +22,23 @@ public class EmployeeServiceTest {
     private EmployeeDao employeeDao;
     @InjectMocks
     private EmployeeService employeeService;
+
     @Test
-    public void should_not_create_employee_when_post_given_invalid_age_that_not_in_range_between_18_and_65(){
-        assertThrows(EmployeeException.class,()->employeeService.createEmployee(new Employee("Tom",17,"Male",5000.0)));
+    public void should_not_create_employee_when_post_given_invalid_age_that_not_in_range_between_18_and_65() {
+        assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 17, "Male", 5000.0)));
         verify(employeeDao, never()).create(any());
-        assertThrows(EmployeeException.class,()->employeeService.createEmployee(new Employee("Tom",66,"Male",5000.0)));
-        verify(employeeDao, never()).create(any());
-    }
-    @Test
-    public void should_not_create_employee_when_post_given_over_30_age_and_salary_below_20000(){
-        assertThrows(EmployeeException.class,()->employeeService.createEmployee(new Employee("Tom",40,"Male",5000.0)));
+        assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 66, "Male", 5000.0)));
         verify(employeeDao, never()).create(any());
     }
+
     @Test
-    public void should_create_employee_when_post_given_valid_age_and_valid_salary(){
+    public void should_not_create_employee_when_post_given_over_30_age_and_salary_below_20000() {
+        assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 40, "Male", 5000.0)));
+        verify(employeeDao, never()).create(any());
+    }
+
+    @Test
+    public void should_create_employee_when_post_given_valid_age_and_valid_salary() {
         Employee employee = new Employee("Tom", 18, "Male", 5000.0);
         Map<String, Integer> expectedId = new HashMap<>();
         expectedId.put("id", 0);
@@ -43,25 +46,35 @@ public class EmployeeServiceTest {
         Map<String, Integer> returnId = employeeService.createEmployee(employee);
         assertEquals(expectedId, returnId);
     }
+
     @Test
-    public void should_not_return_employee_when_get_given_not_exist_id(){
+    public void should_not_return_employee_when_get_given_not_exist_id() {
         when(employeeDao.getById(1)).thenReturn(null);
-        assertThrows(EmployeeException.class,()->employeeService.getEmployeeById(1));
-        verify(employeeDao,times(1)).getById(1);
+        assertThrows(EmployeeException.class, () -> employeeService.getEmployeeById(1));
+        verify(employeeDao, times(1)).getById(1);
     }
+
     @Test
-    public void should_return_employee_when_get_given_exist_id(){
+    public void should_return_employee_when_get_given_exist_id() {
         Employee employee = new Employee("Tom", 18, "Male", 5000.0);
         when(employeeDao.getById(1)).thenReturn(employee);
-        assertEquals(employee,employeeDao.getById(1));
-        verify(employeeDao,times(1)).getById(1);
+        assertEquals(employee, employeeDao.getById(1));
+        verify(employeeDao, times(1)).getById(1);
     }
+
     @Test
-    public void should_change_employee_status_when_delete_employ_given_exist_id(){
+    public void should_change_employee_status_when_delete_employ_given_exist_id() {
         Employee employee = new Employee("Tom", 18, "Male", 5000.0);
         when(employeeDao.create(employee)).thenReturn(employee.getId());
         when(employeeDao.getById(1)).thenReturn(employee);
         when(employeeDao.removeById(1)).thenReturn(true);
         assertTrue(employeeDao.removeById(1));
+    }
+
+    @Test
+    public void should_not_change_employee_status_when_delete_employee_given_not_exist_id() {
+        when(employeeDao.getById(1)).thenReturn(null);
+        assertThrows(EmployeeException.class, () -> employeeService.deleteEmployee(1));
+        verify(employeeDao, times(1)).getById(1);
     }
 }
