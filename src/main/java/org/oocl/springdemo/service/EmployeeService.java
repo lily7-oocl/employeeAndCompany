@@ -45,6 +45,12 @@ public class EmployeeService {
 
     public void updateEmployee(int id, Employee newEmployee) {
         Employee employee = employeeDao.getById(id);
+        if (employee == null) {
+            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_FOUND);
+        }
+        if (!employee.getStatus()){
+            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_ALREADY_DELETED);
+        }
         employeeDao.update(employee,newEmployee);
     }
 

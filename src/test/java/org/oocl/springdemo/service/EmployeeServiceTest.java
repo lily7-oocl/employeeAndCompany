@@ -86,4 +86,11 @@ public class EmployeeServiceTest {
         assertThrows(EmployeeException.class, () -> employeeService.deleteEmployeeById(1));
         verify(employeeDao, times(0)).removeById(1);
     }
+
+    @Test
+    public void should_update_employee_when_update_employee_given_exist_id_and_new_employee() {
+        Employee newEmployee = new Employee("Jerry", 18, "Male", 5000);
+        when(employeeDao.getById(1)).thenReturn(new Employee("Tom", 18, "Male", 5000.0,true));
+        assertDoesNotThrow(() -> employeeService.updateEmployee(1, newEmployee));
+    }
 }
