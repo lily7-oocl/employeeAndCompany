@@ -57,9 +57,21 @@ public class EmployeeControllerTest {
                     "salary": 5000.0
                 }
                 """;
+        String requestBody2 = """
+                {
+                    "name": "TOM",
+                    "age": 66,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
         mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
+                .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody2))
                 .andExpect(status().isBadRequest());
     }
 
