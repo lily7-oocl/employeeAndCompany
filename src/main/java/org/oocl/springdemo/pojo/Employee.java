@@ -8,6 +8,7 @@ public class Employee implements Serializable {
     private int age;
     private String gender;
     private double salary;
+    private boolean status;
 
     public int getId() {
         return id;
@@ -49,6 +50,14 @@ public class Employee implements Serializable {
         this.salary = salary;
     }
 
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     public Employee() {
     }
 
@@ -57,5 +66,13 @@ public class Employee implements Serializable {
         this.age = age;
         this.gender = gender;
         this.salary = salary;
+    }
+
+    public Employee(String name, int age, String gender, double salary, boolean status) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.salary = salary;
+        this.status = status;
     }
 }

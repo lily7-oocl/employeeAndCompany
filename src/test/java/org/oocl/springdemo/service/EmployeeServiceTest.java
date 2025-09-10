@@ -24,7 +24,7 @@ public class EmployeeServiceTest {
     @InjectMocks
     private EmployeeService employeeService;
     @Test
-    public void should_not_create_employee_when_post_given_invalid_age(){
+    public void should_not_create_employee_when_post_given_invalid_age_that_not_in_range_between_18_and_65(){
         assertThrows(EmployeeException.class,()->employeeService.createEmployee(new Employee("Tom",17,"Male",5000.0)));
         verify(employeeDao, never()).create(any());
         assertThrows(EmployeeException.class,()->employeeService.createEmployee(new Employee("Tom",66,"Male",5000.0)));

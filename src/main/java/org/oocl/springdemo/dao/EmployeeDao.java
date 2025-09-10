@@ -19,6 +19,7 @@ public class EmployeeDao {
 
     public int create(Employee employee) {
         employee.setId(++this.id);
+        employee.setStatus(true);
         employees.add(employee);
         return this.id;
     }
