@@ -170,6 +170,24 @@ public class EmployeeControllerTest {
     }
 
     @Test
+    public void should_return_bad_request_when_update_employee_given_exist_id_that_is_deleted_and_new_employee() throws Exception {
+        String RequestBody = """
+                {
+                    "name": "Jack",
+                    "age": 20,
+                    "gender": "Female",
+                    "salary": 50000.0
+                }
+                """;
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        employeeController.deleteEmployeeById(1);
+        mockMvc.perform(put("/employees/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(RequestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void should_return_bad_request_when_update_employee_given_not_exist_id_and_new_employee() throws Exception {
         String RequestBody = """
                 {
@@ -200,7 +218,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_bad_request_when_delete_employees_by_already_deleted_employee_id() throws Exception {
-        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,false));
+        employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0, false));
         employeeController.deleteEmployeeById(1);
         mockMvc.perform(delete("/employees/{id}", 1))
                 .andExpect(status().isBadRequest());
