@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 
 public enum EmployeeErrorStatus {
     EMPLOYEE_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "not found"),
-    EMPLOYEE_NOT_IN_AMONG_AGE(HttpStatus.BAD_REQUEST.value(),"not in among age");
+    EMPLOYEE_NOT_IN_AMONG_AGE(HttpStatus.BAD_REQUEST.value(),"not in among age"),
+    EMPLOYEE_AGE_OVER_30_AND_SALARY_BELOW_20000(HttpStatus.BAD_REQUEST.value(),"age over 30 and salary below 20000");
 
     private final int code;
     private final String message;

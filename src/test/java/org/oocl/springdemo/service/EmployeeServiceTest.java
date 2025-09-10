@@ -31,7 +31,12 @@ public class EmployeeServiceTest {
         verify(employeeDao, never()).create(any());
     }
     @Test
-    public void should_create_employee_when_post_given_valid_age(){
+    public void should_not_create_employee_when_post_given_over_30_age_and_salary_below_20000(){
+        assertThrows(EmployeeException.class,()->employeeService.createEmployee(new Employee("Tom",40,"Male",5000.0)));
+        verify(employeeDao, never()).create(any());
+    }
+    @Test
+    public void should_create_employee_when_post_given_valid_age_and_valid_salary(){
         Employee employee = new Employee("Tom", 18, "Male", 5000.0);
         Map<String, Integer> expectedId = new HashMap<>();
         expectedId.put("id", 0);

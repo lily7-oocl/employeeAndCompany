@@ -48,7 +48,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_return_bad_request_when_create_employee_given_employee_that_has_invalid_age() throws Exception {
+    public void should_return_bad_request_when_create_employee_given_employee_that_has_invalid_age_that_not_in_range_between_18_and_65() throws Exception {
         String requestBody = """
                 {
                     "name": "TOM",
@@ -72,6 +72,22 @@ public class EmployeeControllerTest {
         mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody2))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void should_return_bad_request_when_create_employee_given_employee_that_has_over_30_age_and_salary_below_20000() throws Exception {
+        String requestBody = """
+                {
+                    "name": "TOM",
+                    "age": 40,
+                    "gender": "Male",
+                    "salary": 5000.0
+                }
+                """;
+        mockMvc.perform(post("/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 

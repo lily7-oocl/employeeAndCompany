@@ -20,6 +20,9 @@ public class EmployeeService {
         if (employee.getAge()<18 || employee.getAge()>65) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_IN_AMONG_AGE);
         }
+        if (employee.getAge()>30 && employee.getSalary() < 20000){
+            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_AGE_OVER_30_AND_SALARY_BELOW_20000);
+        }
         int id = employeeDao.create(employee);
         return Map.of("id", id);
     }
