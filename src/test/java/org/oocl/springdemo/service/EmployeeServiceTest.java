@@ -15,6 +15,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.oocl.springdemo.common.EmployeeErrorStatus.*;
 
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
@@ -25,15 +26,18 @@ public class EmployeeServiceTest {
 
     @Test
     public void should_not_create_employee_when_post_given_invalid_age_that_not_in_range_between_18_and_65() {
-        assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 17, "Male", 5000.0)));
+        EmployeeException employeeNotFoundException = assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 17, "Male", 5000.0)));
+        assertEquals(EMPLOYEE_NOT_IN_AMONG_AGE.getMessage(), employeeNotFoundException.getMessage());
         verify(employeeDao, never()).create(any());
-        assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 66, "Male", 5000.0)));
+        EmployeeException employeeNotFoundException2 = assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 66, "Male", 5000.0)));
+        assertEquals(EMPLOYEE_NOT_IN_AMONG_AGE.getMessage(), employeeNotFoundException2.getMessage());
         verify(employeeDao, never()).create(any());
     }
 
     @Test
     public void should_not_create_employee_when_post_given_over_30_age_and_salary_below_20000() {
-        assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 40, "Male", 5000.0)));
+        EmployeeException employeeUnvalidAgeAndSalaryException = assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 40, "Male", 5000.0)));
+        assertEquals(EMPLOYEE_AGE_OVER_30_AND_SALARY_BELOW_20000.getMessage(),employeeUnvalidAgeAndSalaryException.getMessage());
         verify(employeeDao, never()).create(any());
     }
 
@@ -50,7 +54,8 @@ public class EmployeeServiceTest {
     @Test
     public void should_not_return_employee_when_get_given_not_exist_id() {
         when(employeeDao.getById(1)).thenReturn(null);
-        assertThrows(EmployeeException.class, () -> employeeService.getEmployeeById(1));
+        EmployeeException employeeNotFoundException = assertThrows(EmployeeException.class, () -> employeeService.getEmployeeById(1));
+        assertEquals(EMPLOYEE_NOT_FOUND.getMessage(), employeeNotFoundException.getMessage());
         verify(employeeDao, times(1)).getById(1);
     }
 
@@ -74,7 +79,8 @@ public class EmployeeServiceTest {
     @Test
     public void should_not_change_employee_status_when_delete_employee_given_not_exist_id() {
         when(employeeDao.getById(1)).thenReturn(null);
-        assertThrows(EmployeeException.class, () -> employeeService.deleteEmployeeById(1));
+        EmployeeException employeeNotFoundException = assertThrows(EmployeeException.class, () -> employeeService.deleteEmployeeById(1));
+        assertEquals(EMPLOYEE_NOT_FOUND.getMessage(), employeeNotFoundException.getMessage());
         verify(employeeDao, times(1)).getById(1);
     }
 
@@ -83,7 +89,8 @@ public class EmployeeServiceTest {
         Employee employee = new Employee("Tom", 18, "Male", 5000.0,false);
         when(employeeDao.getById(1)).thenReturn(employee);
         when(employeeDao.removeById(1)).thenReturn(true);
-        assertThrows(EmployeeException.class, () -> employeeService.deleteEmployeeById(1));
+        EmployeeException employeeAlreadyDeletedException = assertThrows(EmployeeException.class, () -> employeeService.deleteEmployeeById(1));
+        assertEquals(EMPLOYEE_ALREADY_DELETED.getMessage(), employeeAlreadyDeletedException.getMessage());
         verify(employeeDao, times(0)).removeById(1);
     }
 
@@ -98,7 +105,8 @@ public class EmployeeServiceTest {
     public void should_not_update_employee_when_update_employee_given_not_exist_id_and_new_employee() {
         Employee newEmployee = new Employee("Jerry", 18, "Male", 5000);
         when(employeeDao.getById(1)).thenReturn(null);
-        assertThrows(EmployeeException.class, () -> employeeService.updateEmployee(1,newEmployee));
+        EmployeeException employeeNotFoundException = assertThrows(EmployeeException.class, () -> employeeService.updateEmployee(1, newEmployee));
+        assertEquals(EMPLOYEE_NOT_FOUND.getMessage(), employeeNotFoundException.getMessage());
         verify(employeeDao, times(0)).update(any(),any());
     }
 
@@ -107,7 +115,8 @@ public class EmployeeServiceTest {
         Employee newEmployee = new Employee("Jerry", 18, "Male", 5000);
         Employee oldEmployee = new Employee("Jerry", 18, "Male", 5000,false);
         when(employeeDao.getById(1)).thenReturn(oldEmployee);
-        assertThrows(EmployeeException.class, () -> employeeService.updateEmployee(1,newEmployee));
+        EmployeeException employeeAlreadyDeletedException = assertThrows(EmployeeException.class, () -> employeeService.updateEmployee(1, newEmployee));
+        assertEquals(EMPLOYEE_ALREADY_DELETED.getMessage(), employeeAlreadyDeletedException.getMessage());
         verify(employeeDao, times(0)).update(any(),any());
     }
 }
