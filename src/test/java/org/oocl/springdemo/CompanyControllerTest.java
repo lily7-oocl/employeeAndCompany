@@ -1,6 +1,7 @@
 package org.oocl.springdemo;
 
 import jakarta.annotation.Resource;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.oocl.springdemo.controller.CompanyController;
@@ -41,6 +42,11 @@ public class CompanyControllerTest {
         companyRepository.deleteAll();
     }
 
+    @AfterEach
+    void tearDown() {
+        employeeRepository.deleteAll();
+    }
+
     @Test
     public void should_return_all_employees_when_get_all_employees() throws Exception {
         Map<String, Integer> springIdMap = companyController.createCompany(new Company("spring"));
@@ -65,14 +71,14 @@ public class CompanyControllerTest {
 
     @Test
     public void should_return_company_when_get_company_given_id() throws Exception {
-        Employee employee = new Employee("Tom", 18, "Male", 5000.0);
-        employeeRepository.create(employee);
         Map<String, Integer> companyIdMap = companyController.createCompany(new Company("spring"));
+        Employee employee = new Employee("Tom", 18, "Male", 5000.0);
+        employee.setCompanyId(companyIdMap.get("id"));
+        int id = employeeRepository.create(employee);
         mockMvc.perform(get("/companies/{id}", companyIdMap.get("id")))
                 .andExpect(jsonPath("$.id").value(companyIdMap.get("id")))
                 .andExpect(jsonPath("$.name").value("spring"))
                 .andExpect(jsonPath("$.employees.length()").value(1));
-        employeeRepository.deleteAll();
     }
 
     @Test
