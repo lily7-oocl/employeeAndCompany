@@ -38,7 +38,7 @@ public class EmployeeServiceTest {
     @Test
     public void should_not_create_employee_when_post_given_over_30_age_and_salary_below_20000() {
         EmployeeException employeeUnvalidAgeAndSalaryException = assertThrows(EmployeeException.class, () -> employeeService.createEmployee(new Employee("Tom", 40, "Male", 5000.0)));
-        assertEquals(EMPLOYEE_AGE_OVER_30_AND_SALARY_BELOW_20000.getMessage(),employeeUnvalidAgeAndSalaryException.getMessage());
+        assertEquals(EMPLOYEE_AGE_OVER_AND_INCLUSIVE_30_AND_SALARY_BELOW_20000.getMessage(),employeeUnvalidAgeAndSalaryException.getMessage());
         verify(employeeDao, never()).create(any());
     }
 

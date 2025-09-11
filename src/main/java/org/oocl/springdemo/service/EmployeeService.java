@@ -16,12 +16,13 @@ public class EmployeeService {
     @Autowired
     private EmployeeDao employeeDao;
 
+    //TODO same gender and name can not create
     public Map<String, Integer> createEmployee(Employee employee) {
-        if (employee.getAge()<18 || employee.getAge()>65) {
+        if (employee.getAge() < 18 || employee.getAge() > 65) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_IN_AMONG_AGE);
         }
-        if (employee.getAge()>30 && employee.getSalary() < 20000){
-            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_AGE_OVER_30_AND_SALARY_BELOW_20000);
+        if (employee.getAge() >= 30 && employee.getSalary() < 20000) {
+            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_AGE_OVER_AND_INCLUSIVE_30_AND_SALARY_BELOW_20000);
         }
         int id = employeeDao.create(employee);
         return Map.of("id", id);
@@ -44,22 +45,16 @@ public class EmployeeService {
     }
 
     public void updateEmployee(int id, Employee newEmployee) {
-        Employee employee = employeeDao.getById(id);
-        if (employee == null) {
-            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_FOUND);
-        }
-        if (!employee.getStatus()){
+        Employee employee = this.getEmployeeById(id);
+        if (!employee.getStatus()) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_ALREADY_DELETED);
         }
-        employeeDao.update(employee,newEmployee);
+        employeeDao.update(employee, newEmployee);
     }
 
     public void deleteEmployeeById(int id) {
-        Employee employee = employeeDao.getById(id);
-        if (employee == null) {
-            throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_FOUND);
-        }
-        if (!employee.getStatus()){
+        Employee employee = this.getEmployeeById(id);
+        if (!employee.getStatus()) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_ALREADY_DELETED);
         }
         employeeDao.removeById(id);

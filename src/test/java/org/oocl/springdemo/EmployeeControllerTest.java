@@ -76,7 +76,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_return_bad_request_when_create_employee_given_employee_that_has_over_30_age_and_salary_below_20000() throws Exception {
+    public void should_return_bad_request_when_create_employee_given_employee_that_has_over_and_inclusive_30_age_and_salary_below_20000() throws Exception {
         String requestBody = """
                 {
                     "name": "TOM",
