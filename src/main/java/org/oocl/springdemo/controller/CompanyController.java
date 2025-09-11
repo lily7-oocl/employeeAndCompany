@@ -1,6 +1,6 @@
 package org.oocl.springdemo.controller;
 
-import org.oocl.springdemo.pojo.Company;
+import org.oocl.springdemo.entity.pojo.Company;
 import org.oocl.springdemo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
 //TODO delete exception handle
 @RestController
 public class CompanyController {

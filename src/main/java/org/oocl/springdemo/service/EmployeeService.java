@@ -1,10 +1,12 @@
 package org.oocl.springdemo.service;
 
+import jakarta.annotation.Resource;
 import org.oocl.springdemo.common.EmployeeErrorStatus;
-import org.oocl.springdemo.dao.EmployeeDao;
+import org.oocl.springdemo.entity.dto.UpdateEmployeeDto;
 import org.oocl.springdemo.exception.EmployeeException;
-import org.oocl.springdemo.pojo.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.oocl.springdemo.entity.pojo.Employee;
+import org.oocl.springdemo.repository.EmployeeRepository;
+import org.oocl.springdemo.repository.impl.EmployeeRepositoryDaoImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,9 @@ import java.util.Map;
 
 @Service
 public class EmployeeService {
-    @Autowired
-    private EmployeeDao employeeDao;
+    @Resource(type = EmployeeRepositoryDaoImpl.class)
+//    @Resource(type = EmployeeRepositoryImpl.class)
+    private EmployeeRepository EmployeeRepository;
 
     //TODO same gender and name can not create
     public Map<String, Integer> createEmployee(Employee employee) {
@@ -24,12 +27,12 @@ public class EmployeeService {
         if (employee.getAge() >= 30 && employee.getSalary() < 20000) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_AGE_OVER_AND_INCLUSIVE_30_AND_SALARY_BELOW_20000);
         }
-        int id = employeeDao.create(employee);
+        int id = EmployeeRepository.create(employee);
         return Map.of("id", id);
     }
 
     public Employee getEmployeeById(int id) {
-        Employee employee = employeeDao.getById(id);
+        Employee employee = EmployeeRepository.getById(id);
         if (employee == null) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_NOT_FOUND);
         }
@@ -37,19 +40,22 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeesByGender(String gender) {
-        return employeeDao.getByGender(gender);
+        return EmployeeRepository.getByGender(gender);
     }
 
     public List<Employee> getEmployees() {
-        return employeeDao.getAll();
+        return EmployeeRepository.getAll();
     }
 
-    public void updateEmployee(int id, Employee newEmployee) {
+    public void updateEmployee(int id, UpdateEmployeeDto updateEmployeeDto) {
         Employee employee = this.getEmployeeById(id);
         if (!employee.getStatus()) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_ALREADY_DELETED);
         }
-        employeeDao.update(employee, newEmployee);
+        employee.setAge(updateEmployeeDto.getAge());
+        employee.setName(updateEmployeeDto.getName());
+        employee.setSalary(updateEmployeeDto.getSalary());
+        EmployeeRepository.update(employee, employee);
     }
 
     public void deleteEmployeeById(int id) {
@@ -57,10 +63,10 @@ public class EmployeeService {
         if (!employee.getStatus()) {
             throw new EmployeeException(EmployeeErrorStatus.EMPLOYEE_ALREADY_DELETED);
         }
-        employeeDao.removeById(id);
+        EmployeeRepository.removeById(id);
     }
 
     public List<Employee> getEmployeesByPage(int page, int pageSize) {
-        return employeeDao.getByPage(page, pageSize);
+        return EmployeeRepository.getByPage(page, pageSize);
     }
 }

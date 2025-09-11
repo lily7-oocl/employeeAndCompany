@@ -1,13 +1,14 @@
-package org.oocl.springdemo.dao;
+package org.oocl.springdemo.repository.impl;
 
-import org.oocl.springdemo.pojo.Company;
+import org.oocl.springdemo.entity.pojo.Company;
+import org.oocl.springdemo.repository.CompanyRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CompanyDao {
+public class CompanyRepositoryImpl implements CompanyRepository {
     private final List<Company> companies = new ArrayList<>();
     private int id = 0;
 

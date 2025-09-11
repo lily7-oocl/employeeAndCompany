@@ -1,6 +1,7 @@
 package org.oocl.springdemo.controller;
 
-import org.oocl.springdemo.pojo.Employee;
+import org.oocl.springdemo.entity.dto.UpdateEmployeeDto;
+import org.oocl.springdemo.entity.pojo.Employee;
 import org.oocl.springdemo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,8 +41,8 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateEmployee(@PathVariable("id") int id, @RequestBody Employee newEmployee) {
-        employeeService.updateEmployee(id, newEmployee);
+    public ResponseEntity<Void> updateEmployee(@PathVariable("id") int id, @RequestBody UpdateEmployeeDto updateEmployeeDto) {
+        employeeService.updateEmployee(id, updateEmployeeDto);
         return ResponseEntity.noContent().build();
     }
 

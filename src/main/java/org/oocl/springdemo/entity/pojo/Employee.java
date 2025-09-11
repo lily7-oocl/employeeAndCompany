@@ -1,14 +1,22 @@
-package org.oocl.springdemo.pojo;
+package org.oocl.springdemo.entity.pojo;
+
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+@Entity
+@Table(name = "employee")
 public class Employee implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private int age;
     private String gender;
     private double salary;
     private boolean status;
+    @Column(name = "company_id")
+    private int companyId;
 
     public int getId() {
         return id;
@@ -58,6 +66,14 @@ public class Employee implements Serializable {
         this.status = status;
     }
 
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
+
     public Employee() {
     }
 
@@ -74,5 +90,13 @@ public class Employee implements Serializable {
         this.gender = gender;
         this.salary = salary;
         this.status = status;
+    }
+
+    public Employee(String name, int age, String gender, double salary, int companyId) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.salary = salary;
+        this.companyId = companyId;
     }
 }
