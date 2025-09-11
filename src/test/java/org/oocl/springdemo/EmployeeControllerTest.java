@@ -48,14 +48,16 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_id_when_create_employee_given_employee() throws Exception {
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
         String requestBody = """
                 {
                     "name": "TOM",
                     "age": 18,
                     "gender": "Male",
                     "salary": 5000.0,
+                    "companyId": %d
                 }
-                """;
+                """.formatted(bigSmartCompanyId);
         mockMvc.perform(post("/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
@@ -108,7 +110,8 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_employee_when_get_employee_given_id() throws Exception {
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
         mockMvc.perform(get("/employees/{id}", employeeIdMap.get("id")))
                 .andExpect(jsonPath("$.id").value(employeeIdMap.get("id")))
                 .andExpect(jsonPath("$.name").value("TOM"))
@@ -119,16 +122,18 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_bad_request_when_get_employee_that_is_null_given_id() throws Exception {
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
         mockMvc.perform(get("/employees/{id}", employeeIdMap.get("id")+1))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void should_return_employees_when_get_employees_given_gender() throws Exception {
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
-        employeeController.createEmployee(new Employee("TOM", 18, "Female", 5000.0));
-        Map<String, Integer> employeeIdMap2 = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
+        employeeController.createEmployee(new Employee("TOM", 18, "Female", 5000.0,bigSmartCompanyId));
+        Map<String, Integer> employeeIdMap2 = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
         mockMvc.perform(get("/employees?gender=Male"))
                 .andExpect(jsonPath("$[0].id").value(employeeIdMap.get("id")))
                 .andExpect(jsonPath("$[0].name").value("TOM"))
@@ -144,8 +149,9 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_employees_when_get_employees() throws Exception {
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
-        Map<String, Integer> employeeIdMap2 = employeeController.createEmployee(new Employee("TOM", 18, "Female", 5000.0));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
+        Map<String, Integer> employeeIdMap2 = employeeController.createEmployee(new Employee("TOM", 18, "Female", 5000.0,bigSmartCompanyId));
         mockMvc.perform(get("/employees"))
                 .andExpect(jsonPath("$[0].id").value(employeeIdMap.get("id")))
                 .andExpect(jsonPath("$[0].name").value("TOM"))
@@ -161,13 +167,14 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_no_content_when_update_employee_given_exist_id_and_new_employee() throws Exception {
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
         String RequestBody = """
                 {
                     "id": %d,
                     "name": "Jack",
                     "age": 20,
-                    "gender": "Female",
+                    "gender": "Male",
                     "salary": 50000.0,
                     "status": true
                 }
@@ -182,7 +189,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.id").value(employeeIdMap.get("id")))
                 .andExpect(jsonPath("$.name").value("Jack"))
                 .andExpect(jsonPath("$.age").value(20))
-                .andExpect(jsonPath("$.gender").value("Female"))
+                .andExpect(jsonPath("$.gender").value("Male"))
                 .andExpect(jsonPath("$.salary").value(50000.0));
     }
 
@@ -196,7 +203,8 @@ public class EmployeeControllerTest {
                     "salary": 50000.0
                 }
                 """;
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
         employeeController.deleteEmployeeById(employeeIdMap.get("id"));
         mockMvc.perform(put("/employees/{id}", employeeIdMap.get("id"))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -222,7 +230,8 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_no_content_when_delete_employees_by_id() throws Exception {
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
         mockMvc.perform(delete("/employees/{id}", employeeIdMap.get("id")))
                 .andExpect(status().isNoContent());
     }
@@ -235,7 +244,8 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_bad_request_when_delete_employees_by_already_deleted_employee_id() throws Exception {
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0, false));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0, false,bigSmartCompanyId));
         employeeController.deleteEmployeeById(employeeIdMap.get("id"));
         mockMvc.perform(delete("/employees/{id}", 1))
                 .andExpect(status().isBadRequest());
@@ -243,8 +253,9 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_return_employees_when_get_employees_by_page() throws Exception {
-        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
-        Map<String, Integer> employeeIdMap2 = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0));
+        int bigSmartCompanyId = companyRepository.add(new Company("big smart"));
+        Map<String, Integer> employeeIdMap = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
+        Map<String, Integer> employeeIdMap2 = employeeController.createEmployee(new Employee("TOM", 18, "Male", 5000.0,bigSmartCompanyId));
         mockMvc.perform(get("/employees?page=1&pageSize=2"))
                 .andExpect(jsonPath("$[0].id").value(employeeIdMap.get("id")))
                 .andExpect(jsonPath("$[0].name").value("TOM"))

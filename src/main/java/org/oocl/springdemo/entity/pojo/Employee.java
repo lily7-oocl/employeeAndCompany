@@ -99,4 +99,12 @@ public class Employee implements Serializable {
         this.salary = salary;
         this.companyId = companyId;
     }
+
+    public Employee(String name, int age, String gender, double salary, boolean status, int companyId) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.salary = salary;
+        this.companyId = companyId;
+    }
 }
