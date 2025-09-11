@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "company")
 public class Company {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

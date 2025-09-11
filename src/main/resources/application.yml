@@ -1,11 +1,22 @@
 spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/db_springboot
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: "root"
+#    password: "Q2AYA2n46a68*mi"
   datasource:
     url: jdbc:mysql://localhost:3306/db_springboot
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: "root"
-    password: "Q2AYA2n46a68*mi"
+    password: "1234"
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    Locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    baseline-version: 0
