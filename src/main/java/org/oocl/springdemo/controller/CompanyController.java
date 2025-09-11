@@ -18,7 +18,7 @@ public class CompanyController {
 
     @PostMapping("/companies")
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Integer> createCompany(Company company) {
+    public Map<String, Integer> createCompany(@RequestBody Company company) {
         int id = companyService.addCompany(company);
         return Map.of("id", id);
     }
